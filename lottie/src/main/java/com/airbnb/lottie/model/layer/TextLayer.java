@@ -292,22 +292,26 @@ public class TextLayer extends BaseLayer {
     return Arrays.asList(textLinesArray);
   }
 
-  private boolean isHindi(String text)
-	{
-		for (int i = 0; i < Math.min(text.length(), 8); ++i)
-		{
-			final int codePoint = text.codePointAt(i);
-			if (codePoint >= 0x0900 && codePoint <= 0x097F)
-				return true;
-		}
-		return false;
-	}
+  private boolean isDrawFullText(String text)
+  {
+    for (int i = 0; i < Math.min(text.length(), 8); ++i)
+    {
+      final int codePoint = text.codePointAt(i);
+      // Hindi
+      if (codePoint >= 0x0900 && codePoint <= 0x097F)
+        return true;
+      // Arabic
+      if (codePoint >= 0x0600 && codePoint <= 0x06FF)
+        return true;
+    }
+    return false;
+  }
   
   private void drawFontTextLine(String text, DocumentData documentData, Canvas canvas, float parentScale) {
-    final boolean hindi = isHindi(text);
+    final boolean drawFullText = isDrawFullText(text);
     for (int i = 0; i < text.length(); ) {
       String charString;
-      if (hindi)
+      if (drawFullText)
       {
         charString = text;
       }
